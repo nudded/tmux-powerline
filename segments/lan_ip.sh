@@ -5,8 +5,13 @@
 if [ "$PLATFORM" == "mac" ]; then
 	nic0="en0"
 	nic1="en1"
-	ip0=$(/sbin/ifconfig ${nic0} 2>/dev/null | grep 'inet ')
-	ip1=$(/sbin/ifconfig ${nic1} 2>/dev/null | grep 'inet ')
+	ip0=$(/sbin/ifconfig ${nic0} 2>/dev/null | grep 'inet ' | cut -d' ' -f2)
+	ip1=$(/sbin/ifconfig ${nic1} 2>/dev/null | grep 'inet ' | cut -d' ' -f2)
+  if [ -n "$ip0" ]; then
+    lan_ip=$ip0
+  else
+    lan_ip=$ip1
+  fi
 else
 	#nic=eth0		# Use this NIC.
 	nic="USE_FIRST_FOUND"	# Find the first IP address on all active NICs.
